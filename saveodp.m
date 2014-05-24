@@ -65,3 +65,5 @@ end
 % plot(rand(10))
 % saveodp(gcf,'x.odp')
 % !unzip x.odp content.xml
+% !xml_pp content.xml >content_i.xml
+
