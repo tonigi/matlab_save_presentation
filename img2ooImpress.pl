@@ -1,16 +1,14 @@
 #!/usr/bin/perl -w
 
-# script written by K.-H. Herrmann June 2005
-# updated by T Giorgino May 2014 
+# T Giorgino May 2014 
+
 # creates a Open Office Impress presentation from
 # a list of images (assuming full page images)
-# get "high" res images with:
-# gs -dNOPAUSE -r300 -sDEVICE=pngalpha -sOutputFile=testoutput_%d.png  -dBATCH file.pdf
-# 
-# for LaTeX/beamer slides the following produces exactly 1024x768 images
-#
-#gs -dNOPAUSE -g1024x768 -r205 -sDEVICE=pngalpha \
-# -sOutputFile=Talkimg_%d.png  -dBATCH Talk.pdf
+
+# Inspired by a script by K.-H. Herrmann June 2005
+
+
+
 
 use OpenOffice::OODoc;
 use Getopt::Std;
