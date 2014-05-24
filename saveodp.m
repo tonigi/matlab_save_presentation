@@ -52,11 +52,16 @@ function addslide(td,pngfile)
     presentation=document.getElementsByTagName('office:presentation').item(0);
     
     % clone the 1st slide, assumed to be the 1st child of presentation
-    page1=presentation.getChildNodes.item(0);  
-    newSlide=page1.cloneNode(true);
-    newSlide.getFirstChild.getFirstChild.setAttribute('xlink:href',pngfile);
+    page1=document.getElementsByTagName('draw:page').item(0);
+    newPage=page1.cloneNode(true);
+    newImage=newPage.getElementsByTagName('draw:image').item(0);
+    newImage.setAttribute('xlink:href',pngfile);
     %        ^ draw:frame  ^ draw:image
     
-    presentation.appendChild(newSlide);
+    presentation.appendChild(newPage);
     xmlwrite(cont,document);
 end
+
+% plot(rand(10))
+% saveodp(gcf,'x.odp')
+% !unzip x.odp content.xml
