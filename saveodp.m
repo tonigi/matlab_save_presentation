@@ -4,8 +4,10 @@ function saveodp(h,odpfile,varargin)
 %
 %   saveodp(h,odpfile,['-a']) saves figure h in odpfile.   
 %
-% Appends figure as a separate slide at the end of the presentation 
-% if the -a option is present. 
+%   Appends figure as a separate slide at the end of the presentation 
+%   if the -a option is present. The presentation is based on the file
+%   'template.odp' in the same directory as saveodp.m (the first slide is
+%   cloned).
     narginchk(2,3);
     [mydir,~,~] = fileparts(mfilename('fullpath'));
     odptemplate=fullfile(mydir,'template.odp');
@@ -45,15 +47,16 @@ end
 
 function addslide(td,pngfile)
     cont=fullfile(td,'content.xml');
-    do=xmlread(cont);
+    document=xmlread(cont);
     % do=xmlread('test/content.xml')
-    op=do.getElementsByTagName('office:presentation').item(0);
+    presentation=document.getElementsByTagName('office:presentation').item(0);
     
-    slide0=op.getChildNodes.item(0);
+    % clone the 1st slide, assumed to be the 1st child of presentation
+    page1=presentation.getChildNodes.item(0);  
+    newSlide=page1.cloneNode(true);
+    newSlide.getFirstChild.getFirstChild.setAttribute('xlink:href',pngfile);
+    %        ^ draw:frame  ^ draw:image
     
-    slideN=slide0.cloneNode(true);
-    slideN.getFirstChild.getFirstChild.setAttribute('xlink:href',pngfile);
-    
-    op.appendChild(slideN);
-    xmlwrite(cont,do);
+    presentation.appendChild(newSlide);
+    xmlwrite(cont,document);
 end
