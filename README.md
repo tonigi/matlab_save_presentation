@@ -1,4 +1,4 @@
-matlab_saveodp
+Bmatlab_saveodp
 ==============
 
 A command to create OpenOffice/LibreOffice presentations from Matlab. Please stand by while I populate the repository.
@@ -19,19 +19,36 @@ Usage
 -----
 
 ```
-saveodp(h,filename,['append'])
+saveodp(h,filename,['-a'])
 ```
 
-Saves the figure in the file handle _h_ into the OO presentation _filename_. The file is appended to if 'append' is passed as an argument.
+Saves the figure in the file handle _h_ into the OO presentation _filename_. The file is appended to if '-a' is passed as an argument.
 
 
 Installation
 ------------
 
-The software is composed by two parts: the ```saveodp.m``` file, which you should copy anywhere in Matlab's path, and the ```img2ooImpress.pl``` file, which should be in the executable path. The software relies on a number of Perl modules to work. Installation is straightforward under Linux, less so under Windows.  For this reason,  a standalone-executable version is provided.
+The software is composed by two parts: 
+- the ```saveodp.m``` file, which you should copy anywhere in Matlab's path, and 
+- the ```img2odp.pl``` script, which should be in the executable path. The script relies on a number of Perl modules to work. Installation is straightforward under Linux, less so under Windows.  For this reason,  a standalone-executable version is provided.
 
 *Linux.* Use your distribution's package manager or the *cpan* command to install the _OpenOffice::OODoc_ module.
  
+
+Troubleshooting
+---------------
+
+If you get...
+
+```
+Error using saveodp (line 13)
+Can't locate OpenOffice/OODoc.pm in @INC (@INC contains: /home/toni/perl5/lib/perl5/i386-linux-thread-multi
+/home/toni/perl5/lib/perl5/i386-linux-thread-multi /home/toni/perl5/lib/perl5 /usr/local/lib/perl5 /usr/local/share/perl5
+/usr/lib/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib/perl5 /usr/share/perl5 .) at img2odp.pl line 13.
+BEGIN failed--compilation aborted at img2odp.pl line 13.
+```
+
+...you need to install the OpenOffice::OODoc Perl module. Try e.g. to run ```cpan``` then ```install OpenOffice::OODoc```. Answer _yes_ to all questions.
 
 
 License
