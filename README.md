@@ -1,4 +1,4 @@
-Bmatlab_saveodp
+matlab_saveodp
 ==============
 
 A command to create OpenOffice/LibreOffice presentations from Matlab. Please stand by while I populate the repository.
@@ -9,8 +9,8 @@ Features
 - Writes arbitrary figures/diagrams (like _saveas_)
 - Append to existing presentation, or replace
 - Does not require OpenOffice/LibreOffice to be installed
-- Does not use COM or other IPC processes
 - Output conforms to the OASIS document standard
+- Does not use COM or other IPC 
 
 Note that ODP presentations can be converted to PPT with the [unoconv](http://dag.wiee.rs/home-made/unoconv/) software (but it requires OO/LO to be installed).
 
@@ -30,7 +30,9 @@ Installation
 
 The software is composed by two parts: 
 - the ```saveodp.m``` file, which you should copy anywhere in Matlab's path, and 
-- the ```img2odp.pl``` script, which should be in the executable path. The script relies on a number of Perl modules to work. Installation is straightforward under Linux, less so under Windows.  For this reason,  a standalone-executable version is provided.
+- the ```img2odp.pl``` script, which should be in the executable path. 
+
+The script relies on a number of Perl modules to work. Installation is straightforward under Linux, less so under Windows.  For this reason,  a standalone-executable version is provided.
 
 *Linux.* Use your distribution's package manager or the *cpan* command to install the _OpenOffice::OODoc_ module.
  
