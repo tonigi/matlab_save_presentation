@@ -6,26 +6,54 @@ function saveodp(h,odpfile,varargin)
 %
 % Appends figure as a separate slide at the end of the presentation 
 % if the -a option is present. 
-
     narginchk(2,3);
+    [mydir,~,~] = fileparts(mfilename('fullpath'));
+    odptemplate=fullfile(mydir,'template.odp');
     
-    exe='img2odp.pl';
-
-    opt_a='';
-    if nargin==3 
-        opt_a='-a';
+    if(nargin==3)
+        infile=odpfile;
+    else
+        infile=odptemplate;
     end
 
-    pngfile=[tempname '.png'];
-    saveas(h,pngfile,'png');
-    
-    cmd=sprintf('perl %s %s -o %s %s',exe,opt_a,odpfile,pngfile);
-    [e,r]=system(cmd);
-    
-    if e ~= 0 
-        error(r);
-    end
+    % Unzip in a temp dir
+    td=unodp(infile);
+
+    % Write PNG in there
+    [~,basename,~]=fileparts(td);
+    pngfile=fullfile('Pictures',[basename '.png']);
+    saveas(h,fullfile(td,pngfile),'png');
+
+    % Fixup content
+    addslide(td,pngfile);
    
-    delete(pngfile);
+    % Re-pack and delete
+    reodp(odpfile,td);
 end
 
+function td=unodp(fn) 
+    td=tempname;
+    unzip(fn,td);
+end
+
+% Deletes odpdir
+function reodp(odp,odpdir)
+    zip(odp,'*',odpdir);
+    movefile([odp '.zip'],odp);
+    rmdir(odpdir,'s');
+end
+
+function addslide(td,pngfile)
+    cont=fullfile(td,'content.xml');
+    do=xmlread(cont);
+    % do=xmlread('test/content.xml')
+    op=do.getElementsByTagName('office:presentation').item(0);
+    
+    slide0=op.getChildNodes.item(0);
+    
+    slideN=slide0.cloneNode(true);
+    slideN.getFirstChild.getFirstChild.setAttribute('xlink:href',pngfile);
+    
+    op.appendChild(slideN);
+    xmlwrite(cont,do);
+end
