@@ -1,69 +1,45 @@
 
-function saveodp(h,odpfile,varargin) 
-% SAVEODP Create OpenOffice/LibreOffice presentations from Matlab. 
+function savepptx(h,pptxfile,varargin) 
+% SAVEPPTX Create Office Open XML presentations from Matlab. 
 %
-%   saveodp(h,odpfile,['-a']) saves figure h in odpfile.   
+%   saveodp(h,pptxfile,['-a']) saves figure handle h in a PPTX file.   
 %
 %   Appends figure as a separate slide at the end of the presentation 
-%   if the -a option is present. The presentation is based on the file
-%   'template.odp' in the same directory as saveodp.m (the first slide is
-%   cloned).
+%   if the -a option is present. 
     narginchk(2,3);
-    [mydir,~,~] = fileparts(mfilename('fullpath'));
-    odptemplate=fullfile(mydir,'template.odp');
-    
+
+    setjavapath;
+    import org.odftoolkit.simple.*;
+ 
     if(nargin==3)
-        infile=odpfile;
+        ppt=PresentationDocument.loadDocument(pptxfile)
     else
-        infile=odptemplate;
+        ppt=PresentationDocument.newPresentationDocument();  
+      %  ppt.setPageSize(java.awt.Dimension(1200,900));
     end
-
-    % Unzip in a temp dir
-    td=unodp(infile);
-
-    % Write PNG in there
-    [~,basename,~]=fileparts(td);
-    pngfile=fullfile('Pictures',[basename '.png']);
-    saveas(h,fullfile(td,pngfile),'png');
-
-    % Fixup content
-    addslide(td,pngfile);
-   
-    % Re-pack and delete
-    reodp(odpfile,td);
-end
-
-function td=unodp(fn) 
-    td=tempname;
-    unzip(fn,td);
-end
-
-% Deletes odpdir
-function reodp(odp,odpdir)
-    zip(odp,'*',odpdir);
-    movefile([odp '.zip'],odp);
-    rmdir(odpdir,'s');
-end
-
-function addslide(td,pngfile)
-    cont=fullfile(td,'content.xml');
-    document=xmlread(cont);
-    % do=xmlread('test/content.xml')
-    presentation=document.getElementsByTagName('office:presentation').item(0);
     
-    % clone the 1st slide, assumed to be the 1st child of presentation
-    page1=document.getElementsByTagName('draw:page').item(0);
-    newPage=page1.cloneNode(true);
-    newImage=newPage.getElementsByTagName('draw:image').item(0);
-    newImage.setAttribute('xlink:href',pngfile);
-    %        ^ draw:frame  ^ draw:image
+    slide=ppt.newSlide(-1,'No name',SlideLayout.BLANK);
+    tn=[tempname '.png'];
+    saveas(h,tn,'png');
     
-    presentation.appendChild(newPage);
-    xmlwrite(cont,document);
+    pictureData = org.apache.commons.io.IOUtils.toByteArray(java.io.FileInputStream(tn));
+    idx = ppt.addPicture(pictureData, XSLFPictureData.PICTURE_TYPE_PNG);
+    pic = slide.createPicture(idx);
+
+    out = java.io.FileOutputStream(pptxfile);
+    ppt.write(out);
+    
+    delete(tn);
+
 end
+ 
 
-% plot(rand(10))
-% saveodp(gcf,'x.odp')
-% !unzip x.odp content.xml
-% !xml_pp content.xml >content_i.xml
 
+function setjavapath()
+    [here,~,~] = fileparts(mfilename('fullpath'));
+    poidir=fullfile(here,'odftoolkit-0.6-incubating/');
+    javaaddpath(fullfile(poidir, 'odfdom-java-0.8.9-incubating.jar'));
+    javaaddpath(fullfile(poidir, 'simple-odf-0.8-incubating.jar'));
+    javaaddpath(fullfile(poidir, 'xslt-runner-1.2.2-incubating.jar'));
+    javaaddpath(fullfile(poidir, 'xslt-runner-task-1.2.2-incubating'));
+end

@@ -1,62 +1,65 @@
 matlab_saveodp
-==============
+===============
 
-A command to create OpenOffice/LibreOffice presentations from Matlab. Please stand by while I populate the repository.
+Create Open Document Format (ISO/IEC 26300, ODF) presentations from
+Matlab.
+
+Author: T Giorgino
 
 Features
 --------
 
+- Cross-platform
 - Writes arbitrary figures/diagrams (like _saveas_)
 - Append to existing presentation, or replace
-- Does not require OpenOffice/LibreOffice to be installed
-- Output conforms to the OASIS document standard
+- Does not require MS Office to be installed
 - Does not use COM or other IPC 
+- It is based on Apache's POI (see installation instructions below), so assumes Matlab's JRE to be enabled 
 
-Note that ODP presentations can be converted to PPT with the [unoconv](http://dag.wiee.rs/home-made/unoconv/) software (but it requires OO/LO to be installed).
 
 
-Usage
------
+Synopsis
+--------
 
 ```
 saveodp(h,filename,['-a'])
 ```
 
-Saves the figure in the file handle _h_ into the OO presentation _filename_. The file is appended to if '-a' is passed as an argument.
+Saves the figure in the handle _h_ into the presentation _filename_. The figure is appended as a new slide if '-a' is passed as an argument. Otherwise, a single-slide presentation is created.
+
+
+Example
+-------
+
+```
+plot(1:10);
+saveodp(gcf,'test.pptx');
+plot(rand(10));
+saveodp(gcf,'test.pptx','-a');
+```
+
 
 
 Installation
 ------------
 
-The software is composed by two parts: 
-- the ```saveodp.m``` file, which you should copy anywhere in Matlab's path, and 
-- the ```img2odp.pl``` script, which should be in the executable path. 
+The code uses Apache's odftoolkit library. You need to download and extract it in the same location as the script. Adjust the directory in the script if you have a different version than __0.6-incubator__. 
 
-The script relies on a number of Perl modules to work. Installation is straightforward under Linux, less so under Windows.  For this reason,  a standalone-executable version is provided.
+This matlab command may or may not suffice:
 
-*Linux.* Use your distribution's package manager or the *cpan* command to install the _OpenOffice::OODoc_ module.
+```
+unzip('http://www.apache.org/dyn/closer.cgi/incubator/odftoolkit/binaries/odftoolkit-0.6-incubating-bin.zip')
+```
+
+
+Please note Apache odftoolkit's redistribution and licensing terms.
  
-
-Troubleshooting
----------------
-
-If you get...
-
-```
-Error using saveodp (line 13)
-Can't locate OpenOffice/OODoc.pm in @INC (@INC contains: /home/toni/perl5/lib/perl5/i386-linux-thread-multi
-/home/toni/perl5/lib/perl5/i386-linux-thread-multi /home/toni/perl5/lib/perl5 /usr/local/lib/perl5 /usr/local/share/perl5
-/usr/lib/perl5/vendor_perl /usr/share/perl5/vendor_perl /usr/lib/perl5 /usr/share/perl5 .) at img2odp.pl line 13.
-BEGIN failed--compilation aborted at img2odp.pl line 13.
-```
-
-...you need to install the OpenOffice::OODoc Perl module. Try e.g. to run ```cpan``` then ```install OpenOffice::OODoc```. Answer _yes_ to all questions.
 
 
 License
 -------
 
-    matlab_saveodp - Create OpenOffice/LibreOffice presentations from Matlab.
+    matlab_saveodp - Create Open Document Format presentations from Matlab. 
     Copyright (C) 2014 
 
     This program is free software: you can redistribute it and/or modify
@@ -71,3 +74,4 @@ License
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ 
