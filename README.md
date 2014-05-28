@@ -1,7 +1,10 @@
 matlab_saveodp
 ==============
 
-A command to create OpenOffice/LibreOffice presentations from Matlab. Please stand by while I populate the repository.
+A command to create OpenOffice/LibreOffice presentations from Matlab.
+
+Incidentally, it also includes a Perl script to concatenate PNG images into an ODP presentation.
+
 
 Features
 --------
