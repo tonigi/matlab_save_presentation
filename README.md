@@ -48,7 +48,7 @@ The code uses Apache's odftoolkit library. You need to download and extract it i
 This matlab command may or may not suffice:
 
 ```
-unzip('http://www.apache.org/dyn/closer.cgi/incubator/odftoolkit/binaries/odftoolkit-0.6-incubating-bin.zip')
+unzip('http://mirror.cc.columbia.edu/pub/software/apache/incubator/odftoolkit/binaries/odftoolkit-0.6-incubating-bin.zip')
 ```
 
 
