@@ -1,9 +1,10 @@
-matlab_saveodp
+matlab_save_presentation
 ==============
 
-A command to create OpenOffice/LibreOffice presentations from Matlab.
+Tools to create OpenOffice/LibreOffice and PowerPoint (PPTX) presentations from Matlab.
 
-Incidentally, it also includes a Perl script to concatenate PNG images into an ODP presentation.
+
+This is temporarily split into two directories. This is bound to change.
 
 
 Features
